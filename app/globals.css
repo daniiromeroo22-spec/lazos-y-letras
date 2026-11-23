@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────
+   🎀 PALETA COQUETTE
+   Son "variables CSS": guardamos cada color con un nombre para
+   cambiarlo en UN solo lugar y que se actualice en toda la app.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --cream: #fff7f2; /* fondo general, color "crema" */
+  --blush: #fdeaee; /* rosa muy suave */
+  --petal: #f4c2cd; /* rosa pétalo (bordes) */
+  --rose: #d9718a; /* rosa fuerte (detalles) */
+  --berry: #9c3b58; /* frambuesa (texto de acento y botones, buen contraste) */
+  --cocoa: #5a3a3f; /* café suave (texto principal) */
+  --sage: #cfdccb; /* verde salvia (toques de contraste) */
+}
+
+/* Le decimos a Tailwind que estos colores existen como clases:
+   bg-cream, text-berry, border-petal, etc. */
+@theme inline {
+  --color-cream: var(--cream);
+  --color-blush: var(--blush);
+  --color-petal: var(--petal);
+  --color-rose: var(--rose);
+  --color-berry: var(--berry);
+  --color-cocoa: var(--cocoa);
+  --color-sage: var(--sage);
+  --font-sans: var(--font-nunito);
+  --font-display: var(--font-cormorant);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: var(--cocoa);
+    background-color: var(--cream);
+    /* Patrón de puntitos rosas muy suaves, hecho solo con CSS */
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(217, 113, 138, 0.18) 1px,
+      transparent 0
+    );
+    background-size: 22px 22px;
+    font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-cormorant), Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--petal);
+  }
+
+  /* Anillo visible al navegar con teclado (accesibilidad) */
+  :focus-visible {
+    outline: 3px solid var(--rose);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Piezas reutilizables (clases propias)
+   Así no repetimos 15 clases de Tailwind en cada botón o tarjeta.
+   ────────────────────────────────────────────────────────────── */
+@layer components {
+  .card {
+    @apply rounded-2xl border-2 border-petal bg-white/80 p-5 shadow-[0_6px_0_0_var(--blush)];
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition hover:-translate-y-0.5 active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0;
+  }
+
+  .btn-primary {
+    @apply bg-berry text-cream shadow-[0_4px_0_0_var(--rose)] hover:bg-[#832f49];
+  }
+
+  .btn-secondary {
+    @apply border-2 border-rose bg-white/70 text-berry hover:bg-blush;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border border-petal bg-blush px-3 py-1 text-xs font-semibold text-berry;
+  }
+}
+
+/* Borde de encaje (lace) con "festones" que cuelga bajo la barra de navegación */
+.lace {
+  position: relative;
+}
+.lace::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -9px;
+  height: 10px;
+  pointer-events: none;
+  background: radial-gradient(circle at 10px 0, var(--blush) 8px, transparent 9px)
+    0 0 / 20px 10px repeat-x;
+}
+
+/* Lacito flotando suavemente */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(3deg);
+  }
+}
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Respeto a quien prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .float,
+  .animate-pulse {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
